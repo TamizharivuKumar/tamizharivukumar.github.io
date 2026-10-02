@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Internal Authoring &amp; Image Style Guides — Tamizharivu Kumar</title><meta name="description" content="I developed practical authoring and image guidelines that adapted established technical writing standards to the product’s requirements."><link rel="stylesheet" href="../css/style.css"><style>
+    /* ── CASE STUDY PAGE EXTRAS ── */
+
+    .cs-hero {
+      padding-top: calc(var(--nav-h) + 72px);
+      padding-bottom: 72px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cs-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+    }
+    .cs-breadcrumb a { color: var(--accent); }
+    .cs-breadcrumb span { color: var(--border); }
+
+    .cs-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .cs-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .cs-category::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--accent);
+    }
+
+    .cs-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .cs-summary {
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    /* Stat sidebar */
+    .cs-stat-box {
+      background: var(--ink);
+      padding: 40px 32px;
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: sticky;
+      top: calc(var(--nav-h) + 24px);
+    }
+
+    .cs-stat {
+      border-bottom: 1px solid #2a2a2a;
+      padding-bottom: 28px;
+    }
+    .cs-stat:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .cs-stat-num {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .cs-stat-label {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .cs-meta {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cs-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .cs-meta-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .cs-meta-key {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: #555;
+      text-transform: uppercase;
+    }
+    .cs-meta-val { color: #ccc; font-weight: 500; }
+
+    /* Body sections */
+    .cs-body {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 64px;
+      align-items: start;
+      padding: 72px 0;
+    }
+
+    .cs-content { max-width: 640px; }
+
+    .cs-section { margin-bottom: 60px; }
+    .cs-section:last-child { margin-bottom: 0; }
+
+    .cs-section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .cs-section h2 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 18px;
+    }
+
+    .cs-section p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+    .cs-section p:last-child { margin-bottom: 0; }
+
+    /* Process steps */
+    .process-steps {
+      counter-reset: step;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      border-left: 1px solid var(--border);
+      padding-left: 0;
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0;
+      position: relative;
+      padding-bottom: 36px;
+    }
+    .process-step:last-child { padding-bottom: 0; }
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      padding: 0 20px 0 0;
+      padding-top: 2px;
+      position: relative;
+      left: -1px;
+    }
+    .step-num::before {
+      content: '';
+      position: absolute;
+      left: -5px; top: 7px;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--accent);
+    }
+
+    .step-body h3 {
+      font-size: 17px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .step-body p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 0;
+    }
+
+    /* Challenge/solution pairs */
+    .challenge-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .challenge-card {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .challenge-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .challenge-card-header .pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .pill-challenge { background: #fce8e8; color: #b33; }
+    .pill-solution  { background: #e8f5ec; color: #2a7a3b; }
+
+    .challenge-card-header span:last-child {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .challenge-card-body {
+      padding: 16px 20px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* Results metrics */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .result-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 28px 24px;
+    }
+
+    .result-card .r-num {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .result-card .r-label {
+      font-size: 14px;
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .result-card .r-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Tools sidebar sticky section */
+    .cs-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
+
+    .cs-sidebar-card {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .cs-sidebar-card-head {
+      background: var(--cream);
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cs-sidebar-card-body { padding: 20px; }
+
+    .tool-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .tool-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .tool-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .role-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .role-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .role-item::before {
+      content: '—';
+      color: var(--accent);
+      font-size: 12px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Back nav */
+    .cs-back-nav {
+      padding: 40px 0 72px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      transition: color 0.2s, gap 0.2s;
+    }
+    .back-link:hover { color: var(--ink); gap: 14px; }
+    .back-link svg { width: 16px; height: 16px; }
+
+    .next-project {
+      text-align: right;
+    }
+    .next-project .np-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .next-project a {
+      font-size: 18px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: flex-end;
+      transition: gap 0.2s;
+    }
+    .next-project a:hover { gap: 14px; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .cs-hero-grid,
+      .cs-body { grid-template-columns: 1fr; }
+      .cs-stat-box,
+      .cs-sidebar { position: static; }
+      .results-grid { grid-template-columns: 1fr; }
+    }
+  
+.cs-section{padding:0;scroll-margin-top:100px}.cs-meta-val{max-width:65%;overflow-wrap:anywhere}a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.case-end{padding:40px 0 70px}.case-links{display:flex;gap:18px;flex-wrap:wrap}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style></head><body>  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">Ta<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+
+<main><section class="cs-hero"><div class="container"><div class="breadcrumb"><a href="projects.html">Projects</a><span>/</span><span>Case Study</span></div><div class="cs-hero-grid"><div><p class="cs-category">Content Standards · Honeywell</p><h1 class="cs-title">Internal Authoring &amp; Image Style Guides</h1><p class="cs-summary">I developed practical authoring and image guidelines that adapted established technical writing standards to the product’s requirements.</p></div><div class="cs-stat-box"><div class="cs-meta"><div class="cs-meta-row"><span class="cs-meta-key">Organisation</span><span class="cs-meta-val">Capgemini, supporting Honeywell</span></div><div class="cs-meta-row"><span class="cs-meta-key">Role</span><span class="cs-meta-val">Technical Writer</span></div><div class="cs-meta-row"><span class="cs-meta-key">Product</span><span class="cs-meta-val">Honeywell product documentation</span></div><div class="cs-meta-row"><span class="cs-meta-key">Period</span><span class="cs-meta-val">During Capgemini tenure: 2024–present</span></div></div></div></div></div></section>
+<section style="padding:0"><div class="container"><div class="cs-body"><article class="cs-content"><section class="cs-section" id="section-1"><p class="cs-section-label">01</p><h2>Overview</h2><p>I created internal authoring and image style guides to establish consistent documentation practices across the technical writing team. I used the Microsoft Manual of Style for Technical Publications (MSTP) as the baseline and adapted its guidance to product requirements.</p></section><section class="cs-section" id="section-2"><p class="cs-section-label">02</p><h2>What the Guides Covered</h2><p>The guides covered writing tone, formatting, headings, accordions, images, links, and screenshot annotations. They translated general style principles into practical rules for authoring and review.</p></section><section class="cs-section" id="section-3"><p class="cs-section-label">03</p><h2>Results</h2><p>A shared reference reduced inconsistencies and supported more efficient review cycles. Writers could use the guidance to make consistent content and presentation decisions.</p></section><section class="cs-section" id="section-4"><p class="cs-section-label">04</p><h2>Takeaway</h2><p>Established standards become more useful when they reflect the product’s content and the team’s everyday authoring workflow.</p></section></article><aside class="cs-sidebar" aria-label="Project information"><div class="cs-sidebar-card"><div class="cs-sidebar-card-head">Tools &amp; Standards</div><div class="cs-sidebar-card-body"><div class="tool-list"><div class="tool-item"><span class="tool-dot"></span>MSTP baseline</div></div></div></div><div class="cs-sidebar-card"><div class="cs-sidebar-card-head">On This Page</div><div class="cs-sidebar-card-body"><div class="role-list"><div class="role-item"><a href="#section-1">Overview</a></div><div class="role-item"><a href="#section-2">What the Guides Covered</a></div><div class="role-item"><a href="#section-3">Results</a></div><div class="role-item"><a href="#section-4">Takeaway</a></div></div></div></div><div class="cs-sidebar-card"><div class="cs-sidebar-card-body"><a href="contact.html" class="btn btn-primary">Work With Me</a></div></div></aside></div></div></section><div class="container case-end"><div class="case-links"><a href="projects.html" class="btn btn-outline">Back to All Projects</a><a href="mailto:tamizharivukumar44@gmail.com" class="btn btn-primary">Get In Touch</a></div></div></main><footer><div class="container"><div class="footer-logo">Ta<span>.</span></div><p>Technical Writer · API &amp; Developer Documentation</p><p><a href="mailto:tamizharivukumar44@gmail.com">tamizharivukumar44@gmail.com</a></p><p>© 2026 Tamizharivu Kumar</p></div></footer><script src="../js/main.js"></script></body></html>
