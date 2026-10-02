@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SaaS Knowledge Base — Tamizharivu K</title>
+  <meta name="description" content="Case study: How I built a SaaS knowledge base at Kovai.co that reduced support tickets by 50% in two quarters." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ── CASE STUDY PAGE EXTRAS ── */
+
+    .cs-hero {
+      padding-top: calc(var(--nav-h) + 72px);
+      padding-bottom: 72px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cs-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+    }
+    .cs-breadcrumb a { color: var(--accent); }
+    .cs-breadcrumb span { color: var(--border); }
+
+    .cs-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .cs-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .cs-category::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--accent);
+    }
+
+    .cs-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .cs-summary {
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    /* Stat sidebar */
+    .cs-stat-box {
+      background: var(--ink);
+      padding: 40px 32px;
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: sticky;
+      top: calc(var(--nav-h) + 24px);
+    }
+
+    .cs-stat {
+      border-bottom: 1px solid #2a2a2a;
+      padding-bottom: 28px;
+    }
+    .cs-stat:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .cs-stat-num {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .cs-stat-label {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .cs-meta {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cs-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .cs-meta-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .cs-meta-key {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: #555;
+      text-transform: uppercase;
+    }
+    .cs-meta-val { color: #ccc; font-weight: 500; }
+
+    /* Body sections */
+    .cs-body {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 64px;
+      align-items: start;
+      padding: 72px 0;
+    }
+
+    .cs-content { max-width: 640px; }
+
+    .cs-section { margin-bottom: 60px; }
+    .cs-section:last-child { margin-bottom: 0; }
+
+    .cs-section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .cs-section h2 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 18px;
+    }
+
+    .cs-section p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+    .cs-section p:last-child { margin-bottom: 0; }
+
+    /* Process steps */
+    .process-steps {
+      counter-reset: step;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+      border-left: 1px solid var(--border);
+      padding-left: 0;
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0;
+      position: relative;
+      padding-bottom: 36px;
+    }
+    .process-step:last-child { padding-bottom: 0; }
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      padding: 0 20px 0 0;
+      padding-top: 2px;
+      position: relative;
+      left: -1px;
+    }
+    .step-num::before {
+      content: '';
+      position: absolute;
+      left: -5px; top: 7px;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--accent);
+    }
+
+    .step-body h3 {
+      font-size: 17px;
+      font-weight: 600;
+      font-family: var(--font-body);
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .step-body p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 0;
+    }
+
+    /* Challenge/solution pairs */
+    .challenge-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .challenge-card {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .challenge-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .challenge-card-header .pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .pill-challenge { background: #fce8e8; color: #b33; }
+    .pill-solution  { background: #e8f5ec; color: #2a7a3b; }
+
+    .challenge-card-header span:last-child {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .challenge-card-body {
+      padding: 16px 20px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* Results metrics */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .result-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 28px 24px;
+    }
+
+    .result-card .r-num {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .result-card .r-label {
+      font-size: 14px;
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .result-card .r-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Tools sidebar sticky section */
+    .cs-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
+
+    .cs-sidebar-card {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .cs-sidebar-card-head {
+      background: var(--cream);
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cs-sidebar-card-body { padding: 20px; }
+
+    .tool-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .tool-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .tool-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .role-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .role-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .role-item::before {
+      content: '—';
+      color: var(--accent);
+      font-size: 12px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Back nav */
+    .cs-back-nav {
+      padding: 40px 0 72px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      transition: color 0.2s, gap 0.2s;
+    }
+    .back-link:hover { color: var(--ink); gap: 14px; }
+    .back-link svg { width: 16px; height: 16px; }
+
+    .next-project {
+      text-align: right;
+    }
+    .next-project .np-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .next-project a {
+      font-size: 18px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: flex-end;
+      transition: gap 0.2s;
+    }
+    .next-project a:hover { gap: 14px; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .cs-hero-grid,
+      .cs-body { grid-template-columns: 1fr; }
+      .cs-stat-box,
+      .cs-sidebar { position: static; }
+      .results-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">Tamizh<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="cs-hero">
+    <div class="container">
+
+      <!-- Breadcrumb -->
+      <div class="cs-breadcrumb">
+        <a href="projects.html">Projects</a>
+        <span>/</span>
+        <span>SaaS Knowledge Base</span>
+      </div>
+
+      <div class="cs-hero-grid">
+
+        <!-- Left: Title + Summary -->
+        <div>
+          <p class="cs-category">Knowledge Base · Kovai.co</p>
+          <h1 class="cs-title">How a Structured Knowledge Base Cut Support Tickets in Half</h1>
+          <p class="cs-summary">
+            When I joined Kovai.co, users raised support tickets for issues that
+            documentation should have resolved. I built the knowledge base from scratch —
+            mapping real ticket patterns, filling the highest-impact gaps, and establishing
+            a release-cycle publishing workflow. Within two quarters, support ticket volume
+            dropped by 50%.
+          </p>
+        </div>
+
+        <!-- Right: Stats -->
+        <div class="cs-stat-box">
+          <div class="cs-stat">
+            <div class="cs-stat-num">50%</div>
+            <div class="cs-stat-label">Reduction in support tickets within two quarters of launch</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-stat-num">3 mo</div>
+            <div class="cs-stat-label">To build and launch the initial knowledge base</div>
+          </div>
+          <div class="cs-meta">
+            <div class="cs-meta-row">
+              <span class="cs-meta-key">Company</span>
+              <span class="cs-meta-val">Kovai.co</span>
+            </div>
+            <div class="cs-meta-row">
+              <span class="cs-meta-key">Role</span>
+              <span class="cs-meta-val">Sole Technical Writer</span>
+            </div>
+            <div class="cs-meta-row">
+              <span class="cs-meta-key">Period</span>
+              <span class="cs-meta-val">2021 – 2023</span>
+            </div>
+            <div class="cs-meta-row">
+              <span class="cs-meta-key">Platform</span>
+              <span class="cs-meta-val">Document360</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BODY -->
+  <section style="padding:0;">
+    <div class="container">
+      <div class="cs-body">
+
+        <!-- Main content -->
+        <div class="cs-content">
+
+          <!-- Problem -->
+          <div class="cs-section">
+            <p class="cs-section-label">The Problem</p>
+            <h2>No Documentation. All Tickets.</h2>
+            <p>
+              When I joined Kovai.co as a Technical Writer, the product had no structured
+              knowledge base. Every user question — regardless of how common or simple —
+              landed in the support queue. The customer support team was spending the
+              majority of their time answering the same issues repeatedly, and users
+              experienced delays that damaged product trust.
+            </p>
+            <p>
+              The root cause was clear: there was no self-serve resource where users could
+              find answers independently. The product was growing, the user base was
+              expanding, and without documentation, the support load would only compound.
+              My brief was to fix that — from zero.
+            </p>
+          </div>
+
+          <!-- My Role -->
+          <div class="cs-section">
+            <p class="cs-section-label">My Role</p>
+            <h2>End-to-End Ownership</h2>
+            <p>
+              I was the sole owner of this project across every stage — there was no
+              existing documentation team, no templates to inherit, and no editor to review
+              my work. I was responsible for:
+            </p>
+            <ul class="role-list" style="margin-top:8px;">
+              <li>Analysing the support ticket backlog to identify documentation gaps</li>
+              <li>Interviewing subject matter experts (engineers and PMs) to gather accurate technical content</li>
+              <li>Designing the information architecture and category structure</li>
+              <li>Writing, editing, and publishing all articles in Document360</li>
+              <li>Coordinating with the support team to validate coverage</li>
+              <li>Establishing a release-cycle publishing workflow for ongoing updates</li>
+              <li>Tracking article performance and iterating based on search data</li>
+            </ul>
+          </div>
+
+          <!-- Process -->
+          <div class="cs-section">
+            <p class="cs-section-label">Process</p>
+            <h2>How I Built It</h2>
+
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="step-num">01</div>
+                <div class="step-body">
+                  <h3>Ticket Audit</h3>
+                  <p>I pulled 3 months of support tickets with the customer support lead and grouped them by topic. This gave me a data-backed priority list — the 20 categories accounting for 80% of ticket volume became my first writing targets.</p>
+                </div>
+              </div>
+
+              <div class="process-step">
+                <div class="step-num">02</div>
+                <div class="step-body">
+                  <h3>Information Architecture</h3>
+                  <p>I mapped a category structure in Confluence before writing a single article — product areas, task types, and user journey stages. The goal was a structure users could navigate without a search bar.</p>
+                </div>
+              </div>
+
+              <div class="process-step">
+                <div class="step-num">03</div>
+                <div class="step-body">
+                  <h3>SME Interviews (Async)</h3>
+                  <p>I drafted articles first using product access and existing notes, then sent targeted questions to engineers via Confluence comments — never meeting-first. This kept the process lightweight enough that busy devs actually responded.</p>
+                </div>
+              </div>
+
+              <div class="process-step">
+                <div class="step-num">04</div>
+                <div class="step-body">
+                  <h3>Draft, Review, Publish</h3>
+                  <p>High-priority articles were drafted, reviewed by the support team for accuracy, and published in Document360 with screenshots from Snagit. I shipped the first 20 articles within 6 weeks.</p>
+                </div>
+              </div>
+
+              <div class="process-step">
+                <div class="step-num">05</div>
+                <div class="step-body">
+                  <h3>Ongoing Release Cycle</h3>
+                  <p>I embedded myself in the sprint cycle — attending sprint reviews to flag documentation-impacting changes and updating articles on the same day features shipped. Documentation was never behind the product.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Challenges -->
+          <div class="cs-section">
+            <p class="cs-section-label">Challenges &amp; Solutions</p>
+            <h2>What Stood in the Way</h2>
+
+            <div class="challenge-grid">
+
+              <div class="challenge-card">
+                <div class="challenge-card-header">
+                  <span class="pill pill-challenge">Challenge</span>
+                  <span>Engineers unavailable for reviews</span>
+                </div>
+                <div class="challenge-card-body">
+                  The engineering team was in an active sprint cycle and had no time for documentation meetings or synchronous review sessions.
+                </div>
+              </div>
+              <div class="challenge-card">
+                <div class="challenge-card-header">
+                  <span class="pill pill-solution">Solution</span>
+                  <span>Async review via Confluence comments</span>
+                </div>
+                <div class="challenge-card-body">
+                  I switched to async reviews entirely — drafting articles with specific inline questions for engineers to answer in their own time. Response rates improved immediately because the effort per review dropped to under 5 minutes.
+                </div>
+              </div>
+
+              <div class="challenge-card">
+                <div class="challenge-card-header">
+                  <span class="pill pill-challenge">Challenge</span>
+                  <span>No existing content baseline</span>
+                </div>
+                <div class="challenge-card-body">
+                  Starting from zero meant every article had to be researched, written, and validated without any existing docs to build on or reference.
+                </div>
+              </div>
+              <div class="challenge-card">
+                <div class="challenge-card-header">
+                  <span class="pill pill-solution">Solution</span>
+                  <span>Ticket-first prioritisation</span>
+                </div>
+                <div class="challenge-card-body">
+                  Rather than trying to document everything at once, I used the ticket audit to identify the 20 highest-impact topics. Shipping these first meant the KB had measurable impact within weeks — long before the full library was complete.
+                </div>
+              </div>
+
+              <div class="challenge-card">
+                <div class="challenge-card-header">
+                  <span class="pill pill-challenge">Challenge</span>
+                  <span>Keeping docs in sync with fast releases</span>
+                </div>
+                <div class="challenge-card-body">
+                  The product shipped updates frequently, and documentation could become outdated within days if there was no process to catch changes.
+                </div>
+              </div>
+              <div class="challenge-card">
+                <div class="challenge-card-header">
+                  <span class="pill pill-solution">Solution</span>
+                  <span>Sprint-embedded documentation workflow</span>
+                </div>
+                <div class="challenge-card-body">
+                  I joined sprint review calls and added documentation tasks directly to Jira alongside dev tickets. Any feature that shipped without a documentation update was flagged as incomplete. This made docs part of the definition of done.
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="cs-section">
+            <p class="cs-section-label">Results</p>
+            <h2>The Numbers That Mattered</h2>
+            <p>
+              Outcomes were tracked over two quarters post-launch, in collaboration with
+              the customer support team using their ticketing dashboard.
+            </p>
+
+            <div class="results-grid">
+              <div class="result-card">
+                <div class="r-num">50%</div>
+                <div class="r-label">Drop in support tickets</div>
+                <div class="r-desc">Measured against the same two-quarter period before the KB launched</div>
+              </div>
+              <div class="result-card">
+                <div class="r-num">80+</div>
+                <div class="r-label">Articles published</div>
+                <div class="r-desc">Covering all major product areas, from setup to advanced configuration</div>
+              </div>
+              <div class="result-card">
+                <div class="r-num">3 mo</div>
+                <div class="r-label">Time to launch</div>
+                <div class="r-desc">From zero to a fully structured, published knowledge base</div>
+              </div>
+              <div class="result-card">
+                <div class="r-num">∞</div>
+                <div class="r-label">Repeat questions answered</div>
+                <div class="r-desc">Issues that previously required a support response now resolved through self-serve</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Takeaway -->
+          <div class="cs-section">
+            <p class="cs-section-label">Takeaway</p>
+            <h2>What This Project Taught Me</h2>
+            <p>
+              Documentation is most valuable when it is built backwards from user pain —
+              not forwards from product features. Starting with the ticket audit rather
+              than the product spec meant every article I wrote had an immediate, real use.
+            </p>
+            <p>
+              It also reinforced that documentation velocity depends on process design as
+              much as writing skill. The async review system and the sprint-embedded
+              workflow were not documentation decisions — they were collaboration decisions.
+              Getting those right is what made the rest of it possible.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="cs-sidebar">
+
+          <div class="cs-sidebar-card">
+            <div class="cs-sidebar-card-head">Tools Used</div>
+            <div class="cs-sidebar-card-body">
+              <div class="tool-list">
+                <div class="tool-item"><span class="tool-dot"></span>Document360</div>
+                <div class="tool-item"><span class="tool-dot"></span>Confluence</div>
+                <div class="tool-item"><span class="tool-dot"></span>Jira</div>
+                <div class="tool-item"><span class="tool-dot"></span>Snagit</div>
+                <div class="tool-item"><span class="tool-dot"></span>Google Analytics</div>
+                <div class="tool-item"><span class="tool-dot"></span>Markdown</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cs-sidebar-card">
+            <div class="cs-sidebar-card-head">Responsibilities</div>
+            <div class="cs-sidebar-card-body">
+              <div class="role-list">
+                <div class="role-item">Content Audit &amp; Gap Analysis</div>
+                <div class="role-item">Information Architecture</div>
+                <div class="role-item">SME Interviews</div>
+                <div class="role-item">Writing &amp; Editing</div>
+                <div class="role-item">Screenshot &amp; Visual Creation</div>
+                <div class="role-item">Publishing &amp; Maintenance</div>
+                <div class="role-item">Release Cycle Workflow Design</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cs-sidebar-card">
+            <div class="cs-sidebar-card-head">Project Type</div>
+            <div class="cs-sidebar-card-body">
+              <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <span class="tag">Knowledge Base</span>
+                <span class="tag">Content Strategy</span>
+                <span class="tag">SaaS Docs</span>
+                <span class="tag">Information Architecture</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:8px;">
+            <a href="contact.html" class="btn btn-primary" style="width:100%; justify-content:center;">
+              Work With Me
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Back Nav -->
+      <div class="cs-back-nav">
+        <a href="projects.html" class="back-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          All Projects
+        </a>
+
+        <div class="next-project">
+          <p class="np-label">Next Project</p>
+          <a href="project-seo-overhaul.html">
+            Documentation SEO Overhaul
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">Tamizh<span>.</span></div>
+      <p>Technical Writer — Open to full-time &amp; freelance opportunities.</p>
+      <p><a href="mailto:tamizharivukumar44@gmail.com">tamizharivukumar44@gmail.com</a></p>
+      <p style="margin-top:16px; font-size:12px; color:#555;">© 2025 Tamizharivu K. Built with HTML, CSS &amp; JS. Hosted on GitHub Pages.</p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
